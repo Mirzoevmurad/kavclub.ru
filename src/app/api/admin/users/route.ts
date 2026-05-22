@@ -27,10 +27,10 @@ export async function GET() {
     // Aggregate statistics
     const stats = {
       totalUsers: users.length,
-      admins: users.filter((u) => u.role === 'Admin').length,
-      guides: users.filter((u) => u.role === 'Guide').length,
-      moderators: users.filter((u) => u.role === 'Moderator').length,
-      travelers: users.filter((u) => u.role === 'Traveler').length,
+      admins: users.filter((u: any) => u.role === 'Admin').length,
+      guides: users.filter((u: any) => u.role === 'Guide').length,
+      moderators: users.filter((u: any) => u.role === 'Moderator').length,
+      travelers: users.filter((u: any) => u.role === 'Traveler').length,
       totalMessages: await prisma.message.count(),
     };
 
