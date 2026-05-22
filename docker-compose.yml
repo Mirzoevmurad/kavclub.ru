@@ -9,6 +9,8 @@ services:
       - "3000:3000"
     environment:
       - NODE_ENV=production
+      - NEXTAUTH_SECRET=KavClubSecretKey2026
+      - NEXTAUTH_URL=http://localhost:3000
       - DATABASE_URL=postgresql://kavadmin:KavClubSecure2026@db:5432/kavclub_db
     depends_on:
       - db
