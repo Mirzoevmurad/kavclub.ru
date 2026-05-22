@@ -33,10 +33,6 @@ export default function LoginPage() {
     }
   };
 
-  const handleGoogleLogin = () => {
-    signIn('google', { callbackUrl: '/' });
-  };
-
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', padding: '24px 0', maxWidth: '380px', margin: '0 auto', width: '100%' }}>
       <div style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
@@ -154,43 +150,6 @@ export default function LoginPage() {
             {loading ? 'Вход...' : 'Войти'}
           </button>
         </form>
-
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', color: 'var(--ios-text-secondary)', fontSize: '12px', margin: '8px 0' }}>
-          <hr style={{ flex: 1, border: 'none', height: '1px', background: 'var(--ios-border)' }} />
-          <span>или</span>
-          <hr style={{ flex: 1, border: 'none', height: '1px', background: 'var(--ios-border)' }} />
-        </div>
-
-        {/* Google OAuth Login Button */}
-        <button
-          onClick={handleGoogleLogin}
-          style={{
-            background: 'var(--ios-surface)',
-            color: 'var(--ios-text)',
-            border: '1px solid var(--ios-border)',
-            borderRadius: '10px',
-            padding: '10px',
-            fontSize: '14px',
-            fontWeight: 600,
-            cursor: 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: '10px',
-            boxShadow: 'var(--ios-shadow-sm)',
-            transition: 'background-color 0.2s',
-          }}
-          onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = 'var(--ios-background)')}
-          onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'var(--ios-surface)')}
-        >
-          <svg width="18" height="18" viewBox="0 0 24 24">
-            <path
-              fill="#EA4335"
-              d="M12.24 10.285V14.4h6.887c-.648 2.41-2.519 4.2-5.136 4.2a6.001 6.001 0 1 1 0-12c1.786 0 3.398.72 4.567 1.886l3.111-3.111C19.467 3.197 16.14 1.8 12.24 1.8a10.2 10.2 0 1 0 0 20.4c5.786 0 10.2-4.067 10.2-10.2 0-.693-.06-1.357-.171-2.015H12.24z"
-            />
-          </svg>
-          <span>Войти через Google</span>
-        </button>
       </div>
 
       <div style={{ textAlign: 'center', fontSize: '13px' }}>
