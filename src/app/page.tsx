@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Heart, MessageCircle, Copy, MapPin, Star, UtensilsCrossed, CheckCircle2 } from 'lucide-react';
+import { Heart, MessageCircle, Copy, MapPin, Star, UtensilsCrossed, CheckCircle2, Compass } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface Post {
