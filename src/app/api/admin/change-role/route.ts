@@ -6,9 +6,7 @@ import { z } from 'zod';
 
 const changeRoleSchema = z.object({
   userId: z.string().min(1, 'Укажите ID пользователя'),
-  role: z.enum(['Traveler', 'Guide', 'Moderator', 'Admin'], {
-    errorMap: () => ({ message: 'Недопустимая роль' }),
-  }),
+  role: z.enum(['Traveler', 'Guide', 'Moderator', 'Admin']),
 });
 
 export async function POST(req: Request) {
