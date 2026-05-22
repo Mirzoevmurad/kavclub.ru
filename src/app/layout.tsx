@@ -2,6 +2,7 @@ import './globals.css';
 import type { Metadata, Viewport } from 'next';
 import NavBar from '@/components/NavBar';
 import TabBar from '@/components/TabBar';
+import NextAuthSessionProvider from '@/components/SessionProvider';
 
 export const metadata: Metadata = {
   title: 'KavClub — Социальная сеть для путешественников',
@@ -24,13 +25,15 @@ export default function RootLayout({
   return (
     <html lang="ru">
       <body>
-        <div className="app-container">
-          <NavBar />
-          <main className="ios-content">
-            {children}
-          </main>
-          <TabBar />
-        </div>
+        <NextAuthSessionProvider>
+          <div className="app-container">
+            <NavBar />
+            <main className="ios-content">
+              {children}
+            </main>
+            <TabBar />
+          </div>
+        </NextAuthSessionProvider>
       </body>
     </html>
   );

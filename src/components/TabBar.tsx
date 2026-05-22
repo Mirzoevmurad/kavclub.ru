@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { usePathname, useRouter } from 'next/navigation';
-import { Newspaper, Map, Users, Milestone, User } from 'lucide-react';
+import { Newspaper, Map, Users, Milestone, User, MessageSquare } from 'lucide-react';
 
 export default function TabBar() {
   const pathname = usePathname();
@@ -11,6 +11,7 @@ export default function TabBar() {
   const tabs = [
     { name: 'Лента', icon: Newspaper, path: '/' },
     { name: 'Моя Карта', icon: Map, path: '/wishlist' },
+    { name: 'Чаты', icon: MessageSquare, path: '/chat' },
     { name: 'Встречи', icon: Users, path: '/meetups' },
     { name: 'Гиды', icon: Milestone, path: '/guides' },
     { name: 'Профиль', icon: User, path: '/profile' }

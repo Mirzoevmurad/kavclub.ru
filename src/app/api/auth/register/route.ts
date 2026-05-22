@@ -41,13 +41,17 @@ export async function POST(req: Request) {
     const salt = await bcrypt.genSalt(12);
     const passwordHash = await bcrypt.hash(password, salt);
 
+    // Check user count to make first user an Admin
+    const userCount = await prisma.user.count();
+    const role = userCount === 0 ? 'Admin' : 'Traveler';
+
     // Create user
     const newUser = await prisma.user.create({
       data: {
         name,
         email: email.toLowerCase(),
         passwordHash,
-        role: 'Traveler',
+        role,
       },
       select: {
         id: true,

@@ -1,7 +1,9 @@
 'use client';
 
 import React from 'react';
-import { Award, Compass, MapPin, Grid, Lock, Check } from 'lucide-react';
+import { useSession, signOut } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
+import { Award, Lock, Check, LogOut, ShieldAlert, LogIn } from 'lucide-react';
 
 interface Badge {
   id: number;
@@ -13,6 +15,9 @@ interface Badge {
 }
 
 export default function ProfilePage() {
+  const { data: session, status } = useSession();
+  const router = useRouter();
+
   const travelStats = {
     countries: 4,
     routes: 8,
@@ -54,22 +59,110 @@ export default function ProfilePage() {
     },
   ];
 
+  if (status === 'loading') {
+    return <div style={{ textAlign: 'center', padding: '60px 0', color: 'var(--ios-text-secondary)' }}>Загрузка профиля...</div>;
+  }
+
+  // Enforce authentication / redirection
+  if (status === 'unauthenticated' || !session) {
+    return (
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', padding: '24px 0', maxWidth: '380px', margin: '0 auto', width: '100%' }}>
+        <div className="ios-card" style={{ alignItems: 'center', textAlign: 'center', padding: '40px 20px' }}>
+          <ShieldAlert size={48} color="var(--ios-primary)" style={{ marginBottom: '16px', opacity: 0.8 }} />
+          <h2 style={{ fontSize: '20px', fontWeight: 800, letterSpacing: '-0.5px' }}>Вы не авторизованы</h2>
+          <p style={{ fontSize: '13px', color: 'var(--ios-text-secondary)', marginTop: '8px', lineHeight: '1.4' }}>
+            Войдите в свой аккаунт, чтобы сохранять маршруты, общаться с другими путешественниками и гидами.
+          </p>
+          
+          <button
+            onClick={() => router.push('/login')}
+            style={{
+              marginTop: '20px',
+              width: '100%',
+              background: 'var(--ios-primary)',
+              color: '#fff',
+              border: 'none',
+              borderRadius: '10px',
+              padding: '12px',
+              fontSize: '14px',
+              fontWeight: 600,
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '8px',
+              boxShadow: 'var(--ios-shadow-sm)',
+            }}
+          >
+            <LogIn size={18} />
+            <span>Войти в аккаунт</span>
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  const user = session.user as any;
+  const isAdmin = user.role === 'Admin';
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+      
       {/* Profile Header */}
       <div className="ios-card" style={{ alignItems: 'center', textAlign: 'center' }}>
-        <img
-          src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=150&q=80"
-          alt="Avatar"
-          style={{ width: '80px', height: '80px', borderRadius: '50%', objectFit: 'cover', border: '3px solid var(--ios-primary)' }}
-        />
-        <h2 style={{ fontSize: '20px', fontWeight: 700, marginTop: '8px' }}>Мурад Мирзоев</h2>
-        <p style={{ fontSize: '13px', color: 'var(--ios-text-secondary)' }}>
+        <div style={{ position: 'relative' }}>
+          <img
+            src={user.image || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=150&q=80'}
+            alt="Avatar"
+            style={{ width: '80px', height: '80px', borderRadius: '50%', objectFit: 'cover', border: '3px solid var(--ios-primary)' }}
+          />
+          <span
+            style={{
+              position: 'absolute',
+              bottom: 0,
+              right: 0,
+              fontSize: '10px',
+              fontWeight: 700,
+              padding: '3px 8px',
+              borderRadius: '8px',
+              backgroundColor: isAdmin ? 'var(--ios-red)' : 'var(--ios-primary)',
+              color: '#fff',
+              boxShadow: 'var(--ios-shadow-sm)',
+            }}
+          >
+            {user.role === 'Admin' ? 'Создатель' : user.role === 'Guide' ? 'Гид' : 'Участник'}
+          </span>
+        </div>
+
+        <h2 style={{ fontSize: '20px', fontWeight: 700, marginTop: '12px' }}>{user.name}</h2>
+        <p style={{ fontSize: '12px', color: 'var(--ios-text-secondary)', marginTop: '2px' }}>{user.email}</p>
+        
+        <p style={{ fontSize: '13px', color: 'var(--ios-text-secondary)', marginTop: '8px' }}>
           📍 Владикавказ • В клубе с 2026
         </p>
-        <p className="post-text" style={{ marginTop: '6px', fontSize: '14px' }}>
-          Путешествую по горам Кавказа, ищу лучшие хинкали и делюсь секретными локациями.
-        </p>
+
+        {/* Admin Panel Access Button */}
+        {isAdmin && (
+          <button
+            onClick={() => router.push('/admin')}
+            style={{
+              marginTop: '14px',
+              width: '100%',
+              background: 'var(--ios-red)',
+              color: '#fff',
+              border: 'none',
+              borderRadius: '10px',
+              padding: '10px',
+              fontSize: '13px',
+              fontWeight: 700,
+              cursor: 'pointer',
+              boxShadow: 'var(--ios-shadow-sm)',
+              transition: 'opacity 0.2s',
+            }}
+          >
+            ⚙️ Открыть панель администратора
+          </button>
+        )}
 
         {/* Stats Row */}
         <div
@@ -79,7 +172,7 @@ export default function ProfilePage() {
             justifyContent: 'space-around',
             borderTop: '1px solid var(--ios-border)',
             paddingTop: '12px',
-            marginTop: '8px',
+            marginTop: '14px',
           }}
         >
           <div style={{ display: 'flex', flexDirection: 'column' }}>
@@ -124,7 +217,6 @@ export default function ProfilePage() {
               <span style={{ fontSize: '13px', fontWeight: 700, color: 'var(--ios-text)' }}>{a.name}</span>
               <span style={{ fontSize: '10px', color: 'var(--ios-text-secondary)', marginTop: '2px' }}>{a.desc}</span>
 
-              {/* Status Lock/Check Icon */}
               <div
                 style={{
                   position: 'absolute',
@@ -139,6 +231,32 @@ export default function ProfilePage() {
           ))}
         </div>
       </div>
+
+      {/* Logout Action */}
+      <button
+        onClick={() => signOut({ callbackUrl: '/' })}
+        style={{
+          background: 'var(--ios-surface)',
+          color: 'var(--ios-red)',
+          border: '1px solid var(--ios-border)',
+          borderRadius: '12px',
+          padding: '12px',
+          fontSize: '14px',
+          fontWeight: 600,
+          cursor: 'pointer',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: '8px',
+          boxShadow: 'var(--ios-shadow-sm)',
+          transition: 'background-color 0.2s',
+          marginBottom: '20px',
+        }}
+      >
+        <LogOut size={16} />
+        <span>Выйти из аккаунта</span>
+      </button>
+
     </div>
   );
 }
