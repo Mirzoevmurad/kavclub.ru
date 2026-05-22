@@ -1,7 +1,6 @@
-'use client';
-
 import React from 'react';
-import { Compass } from 'lucide-react';
+import Link from 'next/link';
+import { Compass, MessageSquare } from 'lucide-react';
 
 interface NavBarProps {
   title?: string;
@@ -10,13 +9,13 @@ interface NavBarProps {
 export default function NavBar({ title = 'KavClub' }: NavBarProps) {
   return (
     <header className="ios-navbar">
-      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+      <Link href="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '8px' }}>
         <Compass size={22} color="var(--ios-primary)" />
-        <h1 style={{ color: 'var(--ios-text)' }}>{title}</h1>
-      </div>
-      <button className="ios-navbar-btn">
-        <span>RU</span>
-      </button>
+        <h1 style={{ color: 'var(--ios-text)', fontSize: '17px', fontWeight: 600 }}>{title}</h1>
+      </Link>
+      <Link href="/chat" className="ios-navbar-btn" style={{ display: 'flex', alignItems: 'center' }}>
+        <MessageSquare size={22} color="var(--ios-primary)" />
+      </Link>
     </header>
   );
 }
