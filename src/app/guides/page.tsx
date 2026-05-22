@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { useRouter } from 'next/navigation';
 import { Star, CheckCircle, Search, Calendar } from 'lucide-react';
 
 interface Guide {
@@ -17,6 +18,7 @@ interface Guide {
 }
 
 export default function GuidesPage() {
+  const router = useRouter();
   const guides: Guide[] = [
     {
       id: 1,
@@ -126,7 +128,7 @@ export default function GuidesPage() {
 
             {/* Book Button */}
             <button
-              onClick={() => alert(`Связаться с гидом ${g.name}`)}
+              onClick={() => router.push(`/chat/usr-${g.id === 1 ? 'georgiy' : 'nino'}`)}
               style={{
                 width: '100%',
                 background: 'var(--ios-primary)',

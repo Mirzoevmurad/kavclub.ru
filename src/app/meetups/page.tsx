@@ -1,6 +1,8 @@
 'use client';
 
 import React, { useState } from 'react';
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 import { Users, Clock, Send, PlusCircle } from 'lucide-react';
 
 interface Meetup {
@@ -13,6 +15,8 @@ interface Meetup {
 }
 
 export default function MeetupsPage() {
+  const { data: session } = useSession();
+  const router = useRouter();
   const [meetups, setMeetups] = useState<Meetup[]>([
     {
       id: 1,
@@ -41,8 +45,8 @@ export default function MeetupsPage() {
 
     const newMeetup: Meetup = {
       id: Date.now(),
-      user: 'Вы (Тестовый аккаунт)',
-      avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=150&q=80',
+      user: session?.user?.name || 'Вы (Тестовый аккаунт)',
+      avatar: session?.user?.image || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=150&q=80',
       text: newText,
       timeLeft: 'осталось 24 часа',
       location: newLoc || 'Везде',
@@ -138,7 +142,7 @@ export default function MeetupsPage() {
             </div>
             <p className="post-text">{m.text}</p>
             <button
-              onClick={() => alert(`Открыть чат с ${m.user}`)}
+              onClick={() => router.push(`/chat/usr-${m.id === 1 ? 'daniil' : 'alena'}`)}
               style={{
                 width: '100%',
                 background: 'var(--ios-border)',

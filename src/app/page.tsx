@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { Heart, MessageCircle, Copy, MapPin, Star, UtensilsCrossed, CheckCircle2, Compass } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -27,6 +28,7 @@ interface Post {
 }
 
 export default function FeedPage() {
+  const router = useRouter();
   const [activeSegment, setActiveSegment] = useState<'popular' | 'my-routes'>('popular');
   const [copiedRoute, setCopiedRoute] = useState<string | null>(null);
   const [posts, setPosts] = useState<Post[]>([
@@ -162,7 +164,11 @@ export default function FeedPage() {
         posts.map((post) => (
           <article className="ios-card" key={post.id}>
             {/* Header */}
-            <div className="post-header">
+            <div 
+              className="post-header" 
+              style={{ cursor: 'pointer' }}
+              onClick={() => router.push(`/chat/usr-${post.id === 1 ? 'alex' : post.id === 2 ? 'maria' : 'ruslan'}`)}
+            >
               <img src={post.avatar} alt={post.author} className="post-avatar" />
               <div className="post-author-info">
                 <span className="post-author-name">{post.author}</span>

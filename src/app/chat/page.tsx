@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 import { MessageSquare, Search, ChevronRight, User } from 'lucide-react';
 
 interface Dialog {
@@ -19,6 +20,7 @@ interface Dialog {
 }
 
 export default function ChatListPage() {
+  const { data: session, status } = useSession();
   const [dialogs, setDialogs] = useState<Dialog[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
@@ -51,6 +53,47 @@ export default function ChatListPage() {
   const filteredDialogs = dialogs.filter((d) =>
     d.user.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  if (status === 'loading') {
+    return <div style={{ textAlign: 'center', padding: '60px 0', color: 'var(--ios-text-secondary)' }}>Загрузка чатов...</div>;
+  }
+
+  if (status === 'unauthenticated' || !session) {
+    return (
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', padding: '24px 0', maxWidth: '380px', margin: '0 auto', width: '100%' }}>
+        <div className="ios-card" style={{ alignItems: 'center', textAlign: 'center', padding: '40px 20px' }}>
+          <MessageSquare size={48} color="var(--ios-primary)" style={{ marginBottom: '16px', opacity: 0.8 }} />
+          <h2 style={{ fontSize: '20px', fontWeight: 800, letterSpacing: '-0.5px' }}>Вы не авторизованы</h2>
+          <p style={{ fontSize: '13px', color: 'var(--ios-text-secondary)', marginTop: '8px', lineHeight: '1.4' }}>
+            Войдите в свой аккаунт, чтобы общаться с другими путешественниками, гидами и создателями маршрутов.
+          </p>
+          
+          <button
+            onClick={() => router.push('/login')}
+            style={{
+              marginTop: '20px',
+              width: '100%',
+              background: 'var(--ios-primary)',
+              color: '#fff',
+              border: 'none',
+              borderRadius: '10px',
+              padding: '12px',
+              fontSize: '14px',
+              fontWeight: 600,
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '8px',
+              boxShadow: 'var(--ios-shadow-sm)',
+            }}
+          >
+            <span>Войти в аккаунт</span>
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
