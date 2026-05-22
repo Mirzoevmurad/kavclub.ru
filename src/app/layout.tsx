@@ -1,12 +1,19 @@
 import './globals.css';
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import NavBar from '@/components/NavBar';
 import TabBar from '@/components/TabBar';
 
 export const metadata: Metadata = {
   title: 'KavClub — Социальная сеть для путешественников',
   description: 'Поделись своими маршрутами, находи попутчиков и локальных гидов',
-  viewport: 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover',
+};
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+  viewportFit: 'cover',
 };
 
 export default function RootLayout({
